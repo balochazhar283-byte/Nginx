@@ -1,0 +1,23 @@
+services:
+  app1:
+    build: ./app1
+    restart: always
+
+  app2:
+    build: ./app2
+    restart: always
+
+  apache:
+    build: ./apache          # load balancer, 50/50
+    depends_on:
+      - app1
+      - app2
+    restart: always
+
+  nginx:
+    build: ./nginx           # public entry point
+    ports:
+      - "8000:80"
+    depends_on:
+      - apache
+    restart: always
